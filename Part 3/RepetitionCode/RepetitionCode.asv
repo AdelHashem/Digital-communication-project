@@ -1,0 +1,27 @@
+clc;
+clear all;
+%%
+N_bits = 10000;
+bit_seq = GenerateBits(N_bits);
+p_vec = linspace(0,0.5,500);
+
+
+%% effect of P on the BER
+r = .1;
+L = ceil(1/r);
+sample = GenerateSamples(bit_seq,L);
+BER = zeros(1,length(p_vec));
+for i =1:length(p_vec)
+    rec_sample = BSC(sample,L,p_vec(i));
+    decoded_bits = Decoder(rec_sample,L);
+    BER(i) = ComputeBER(bit_seq,decoded_bits);
+end
+figure
+plot(p_vec,BER,'g');
+title('effect of P on the BER')
+ylabel('BER')
+xlabel('p')
+%% effect of L on the BER
+L_vec = 1:1:40;
+p = 0.2;
+
